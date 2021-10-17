@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TIMER</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <section>
+      <!-- JIKA TIMER JALAN, JANGAN DI MINIMIZE BROWSERNYA -->
+      <!-- JIKA TIMER JALAN, JANGAN DI MINIMIZE BROWSERNYA -->
+      <!-- JIKA TIMER JALAN, JANGAN DI MINIMIZE BROWSERNYA -->
+    <form>
+      Menit: <br><input type="text" id="mnt" name="mnt" placeholder="Menit"/><br><br>
+      Detik: <br><input type="text" id="dtk" name="dtk" size="2" maxlength="2" placeholder="Detik"/><br><br>
+      <input type="button" id="start" value="START" onclick="countdownTimer();setTimer();"/>
+      <input type="button" id="reset" value="RESET" onclick="resetTimer()"/>
+      </form>
+      <br><br>
+      <div>
+        <h1 style="text-align: center;">
+          <span id="showmnt">00</span>:<span id="showdtk">00</span>
+        </h1> 
+      </div>
+  </section>
+  <script type="text/javascript">
+    // var
+    var menit = 0;
+    var set = 0;
+    var detik = 0;
+    var startval = 0;     
+    var timeout;
+    var stopTime;
+
+    function setTimer(){
+      set = document.getElementById('mnt').value;
+      console.log(set);
+      console.log(menit);
+      console.log(detik);
+      stopTime = window.setTimeout('setTimer()', 1000);
+      // UBAH BEL DI        'SINI'
+      if(set >= 10 && menit == 0){
+        // AKAN BERBUNYI DI MENIT 0:59 (3 menit)
+          var audioElement = new Audio('tipe1.mp3');
+          audioElement.play();
+          clearTimeout(stopTime);
+      }
+    }
+    function countdownTimer() {
+      // ambil data dari id mnt dan dtk, jika startval 0
+      if(startval == 0 && document.getElementById('mnt') && document.getElementById('dtk')) {
+        // validasi int
+        menit = parseInt(document.getElementById('mnt').value) + 0;
+        detik = parseInt(document.getElementById('dtk').value) * 1;
+    
+        // set 0 jika bukan int
+        if(isNaN(menit)) menit = 0;
+        if(isNaN(detik)) detik = 0;
+    
+        // ambil data dari id mnt dan dtk
+        document.getElementById('mnt').value = menit;
+        document.getElementById('dtk').value = detik;
+        startval = 1;
+        document.getElementById('start').setAttribute('disabled', 'disabled');//disable start button
+      }
+      // jika waktu = 0, startval 0
+
+      if(menit==0 && detik==0) {
+        startval = 0;
+        var audioElement = new Audio('tipe2.mp3');
+        audioElement.play();
+        document.getElementById('start').removeAttribute('disabled');     //menghilangkan  disable start button
+        return false;
+      }
+
+      if(menit==0 && detik==0) {
+        startval = 0;
+        var audioElement = new Audio('tipe2.mp3');
+        audioElement.play();
+        document.getElementById('start').removeAttribute('disabled');     //menghilangkan  disable start button
+        return false;
+      }
+      else {
+        // perhitungan waktu
+        detik--;
+        if(detik < 0) {
+          if(menit > 0) {
+            detik = 59;
+            menit--;
+          }
+          else {
+            detik = 0;
+            menit = 0;
+          }
+        }
+      }
+    
+      // display the time in page, and auto-calls this function after 1 seccond
+      document.getElementById('showmnt').innerHTML = menit;
+      document.getElementById('showdtk').innerHTML = detik;
+      timeout = window.setTimeout('countdownTimer()', 1000);
+    }
+
+    function resetTimer(){
+      clearTimeout(timeout);
+      document.getElementById('start').removeAttribute('disabled'); 
+      document.getElementById('showmnt').innerHTML = "00";
+      document.getElementById('showdtk').innerHTML = "00";
+      menit = 0;
+      detik = 0;
+      startval = 0;
+    }
+  </script>
+</body>
+</html>
